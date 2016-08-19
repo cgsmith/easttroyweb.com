@@ -384,6 +384,10 @@ class WP_Term_Query {
 		}
 
 		$orderby = $this->parse_orderby( $this->query_vars['orderby'] );
+		if ( $orderby ) {
+			$orderby = "ORDER BY $orderby";
+		}
+
 		$order = $this->parse_order( $this->query_vars['order'] );
 
 		if ( $taxonomies ) {
@@ -618,10 +622,10 @@ class WP_Term_Query {
 
 		$this->sql_clauses['select']  = "SELECT $distinct $fields";
 		$this->sql_clauses['from']    = "FROM $wpdb->terms AS t $join";
-		$this->sql_clauses['orderby'] = $orderby ? "ORDER BY $orderby $order" : '';
+		$this->sql_clauses['orderby'] = $orderby ? "$orderby $order" : '';
 		$this->sql_clauses['limits']  = $limits;
 
-		$this->request = $this->request = "{$this->sql_clauses['select']} {$this->sql_clauses['from']} {$where} {$this->sql_clauses['orderby']} {$this->sql_clauses['limits']}";
+		$this->request = "{$this->sql_clauses['select']} {$this->sql_clauses['from']} {$where} {$this->sql_clauses['orderby']} {$this->sql_clauses['limits']}";
 
 		// $args can be anything. Only use the args defined in defaults to compute the key.
 		$key = md5( serialize( wp_array_slice_assoc( $args, array_keys( $this->query_var_defaults ) ) ) . serialize( $taxonomies ) . $this->request );

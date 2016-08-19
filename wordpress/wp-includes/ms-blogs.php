@@ -461,8 +461,8 @@ function clean_blog_cache( $blog ) {
 	 *
 	 * @since 4.6.0
 	 *
-	 * @param int     $id Blog ID.
-	 * @param WP_Site $blog
+	 * @param int     $id              Blog ID.
+	 * @param WP_Site $blog            Site object.
 	 * @param string  $domain_path_key md5 hash of domain and path.
 	 */
 	do_action( 'clean_site_cache', $blog_id, $blog, $domain_path_key );
@@ -520,7 +520,6 @@ function get_site( &$site = null ) {
  * @access private
  *
  * @see update_site_cache()
- *
  * @global wpdb $wpdb WordPress database abstraction object.
  *
  * @param array $ids ID list.
@@ -729,7 +728,7 @@ function update_blog_option( $id, $option, $value, $deprecated = null ) {
 	$id = (int) $id;
 
 	if ( null !== $deprecated  )
-		_deprecated_argument( __FUNCTION__, '3.1' );
+		_deprecated_argument( __FUNCTION__, '3.1.0' );
 
 	if ( get_current_blog_id() == $id )
 		return update_option( $option, $value );
@@ -963,7 +962,7 @@ function update_blog_status( $blog_id, $pref, $value, $deprecated = null ) {
 	global $wpdb;
 
 	if ( null !== $deprecated  )
-		_deprecated_argument( __FUNCTION__, '3.1' );
+		_deprecated_argument( __FUNCTION__, '3.1.0' );
 
 	if ( ! in_array( $pref, array( 'site_id', 'domain', 'path', 'registered', 'last_updated', 'public', 'archived', 'mature', 'spam', 'deleted', 'lang_id') ) )
 		return $value;
@@ -1069,11 +1068,11 @@ function get_last_updated( $deprecated = '', $start = 0, $quantity = 40 ) {
  *
  * @since 4.6.0
  *
- * @param string|array $args Optional. Array or string of arguments. See {@see WP_Network_Query::parse_query()}
- *                           for information on accepted arguments. Default empty.
+ * @param string|array $args Optional. Array or string of arguments. See WP_Network_Query::parse_query()
+ *                           for information on accepted arguments. Default empty array.
  * @return int|array List of networks or number of found networks if `$count` argument is true.
  */
-function get_networks( $args = '' ) {
+function get_networks( $args = array() ) {
 	$query = new WP_Network_Query();
 
 	return $query->query( $args );
@@ -1089,7 +1088,7 @@ function get_networks( $args = '' ) {
  *
  * @global WP_Network $current_site
  *
- * @param WP_Network|int|null $network Network to retrieve.
+ * @param WP_Network|int|null $network Network to retrieve, passed by reference.
  * @return WP_Network|null The network object or null if not found.
  */
 function get_network( &$network = null ) {
